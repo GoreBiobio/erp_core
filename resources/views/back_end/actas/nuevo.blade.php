@@ -34,33 +34,27 @@
                         <!-- text input -->
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <div class="form-group">
-                            <div class="col-md-3">
-                                <label for="rut"><strong>Seleccione Sesión</strong></label>
-                                <select class="form-control" name="id_sesion">
-                                    @foreach($sesiones as $sesiones)
-                                        <option value="{{ $sesiones->idSesiones }}">
-                                            {{ date("M/Y",strtotime($sesiones -> fechaSesion))  }}
-                                            - {{ $sesiones->numeroSesion }}
-                                            - {{ $sesiones->tipoSesion }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                            <div class="col-md-2">
+                                <label><strong>Fecha Sesión</strong></label>
+                                <input class="form-control" type="date" name="fec_sesion" maxlength="6" min="0" required>
                             </div>
 
-                            <div class="col-md-2">
-                                <label for="rut"><strong>Seleccione Comisión</strong></label>
-                                <select class="form-control" name="id_comision">
-                                    <option value="0">-- NORMAL --</option>
-                                    @foreach($comisiones as $comisiones)
-                                        <option
-                                            value="{{ $comisiones->nombreComisiones }}">{{ $comisiones -> nombreComisiones }}</option>
-                                    @endforeach
-                                </select>
+                            <div class="col-md-1">
+                                <label><strong>N° Sesión</strong></label>
+                                <input class="form-control" type="number" name="num_sesion" maxlength="6" min="0" required>
                             </div>
 
                             <div class="col-md-2">
                                 <label><strong>N° Acta</strong></label>
                                 <input class="form-control" type="number" name="num_acta" maxlength="6" min="0" required>
+                            </div>
+
+                            <div class="col-md-2">
+                                <label for="rut"><strong>Tipo de Sesión</strong></label>
+                                <select class="form-control" name="tipo_sesion">
+                                    <option value="Ordinaria">Ordinaria</option>
+                                    <option value="Extraordinaria">Extraordinaria</option>
+                                </select>
                             </div>
 
                             <div class="col-md-2">
@@ -81,7 +75,7 @@
                             <div class="col-md-4">
                                 <label for="telefono"><strong>Observaciones de la Carga:</strong></label>
                                 <textarea class="form-control" name="obs_acta" rows="3"
-                                          placeholder="Ingrese el detalle de la reserva."></textarea>
+                                          placeholder="Observaciones del acta y/o sesión."></textarea>
                             </div>
                         </div>
                         <div class="box-footer">

@@ -5,5 +5,5 @@
         <small>Consejo Regional del Biobio - <a href="mailto:soporte@gorebiobio.cl">soporte@gorebiobio.cl</a></small>
     </div>
     <!-- Default to the left -->
-    <strong>&copy; 2018 </strong> Unidad de Informática y Soporte. <small><small>Versión: 0.1_UI_CORE</small></small>
+    <strong>&copy; 2018 </strong> Unidad de Informática y Soporte. <small><small>Versión: 0.2_UI_CORE</small></small>
 </footer>

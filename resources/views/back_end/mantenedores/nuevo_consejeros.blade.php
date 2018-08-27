@@ -23,10 +23,20 @@
                         <!-- text input -->
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <div class="form-group">
-                            <div class="col-md-8">
+                            <div class="col-md-6">
                                 <label for="rut"><strong>Nombre Consejero(a)</strong></label>
                                 <input class="form-control" type="text" name="nombre_consejero" required>
                             </div>
+
+                            <div class="col-md-3">
+                                <label for="rut"><strong>Circunscripción</strong></label>
+                                <select class="form-control" name="id_cir">
+                                    @foreach($circ as $circ)
+                                        <option value="{{ $circ->idCirc }}">{{ $circ -> nombreCirc }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
                         </div>
                         <div class="box-footer">
                             <button type="reset" class="btn btn-default">Limpiar Formulario</button>
@@ -49,12 +59,14 @@
                         <tbody>
                         <tr>
                             <th>Consejero</th>
+                            <th>Zona</th>
                             <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
                         @foreach($consejeros as $consejeros)
                             <tr>
                                 <td>{{ $consejeros -> nombreConsejeros }}</td>
+                                <td>{{ $consejeros -> nombreCirc }}</td>
                                 <td>@if($consejeros -> estadoConsejeros == '1')
                                         <button class="btn btn-xs btn-success"><i class="fa fa-circle-o"></i> Activo(a)
                                         </button>

@@ -35,25 +35,13 @@
                         <!-- text input -->
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <div class="form-group">
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <label for="rut"><strong>Seleccione Sesión</strong></label>
                                 <select class="form-control" name="id_sesion">
-                                    @foreach($sesiones as $sesiones)
-                                        <option value="{{ $sesiones->idSesiones }}">
-                                            {{ date("M/Y",strtotime($sesiones -> fechaSesion))  }}
-                                            - {{ $sesiones->numeroSesion }}
-                                            - {{ $sesiones->tipoSesion }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="col-md-2">
-                                <label for="rut"><strong>Seleccione Comisión</strong></label>
-                                <select class="form-control" name="id_comision">
-                                    @foreach($comisiones as $comisiones)
-                                        <option value="{{ $comisiones->idComisiones }}">
-                                            {{ $comisiones -> nombreComisiones }}
+                                    @foreach($actas as $actas)
+                                        <option value="{{ $actas->idActas }}">
+                                            {{ date("d/M/Y",strtotime($actas -> fechaComision))  }}
+                                            - {{ $actas->nombreComisiones }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -72,12 +60,12 @@
 
                             <div class="col-md-3">
                                 <label for="nombres"><strong>Dirigido a:</strong></label>
-                                <input class="form-control" type="text" name="dirigido_a">
+                                <input class="form-control" type="text" name="dirigido_a" required>
                             </div>
 
                             <div class="col-md-2">
                                 <label for="rut"><strong>Fecha de Envio</strong></label>
-                                <input class="form-control" type="date" name="fecha_envio">
+                                <input class="form-control" type="date" name="fecha_envio" required>
                             </div>
 
                         </div>
@@ -85,12 +73,12 @@
                         <div class="form-group">
                             <div class="col-md-3">
                                 <label for="exampleInputFile"><strong>Documento Solicitud</strong></label>
-                                <input type="file" id="exampleInputFile" name="doc_digital">
+                                <input type="file" id="exampleInputFile" name="doc_digital" required>
                                 <p class="help-block">Archivo en formato .pdf ó .docx</p>
                             </div>
 
                             <div class="col-md-4">
-                                <label for="nombres"><strong>Funcionario que registra Proyecto</strong></label>
+                                <label for="nombres"><strong>Funcionario que registra Solicitud</strong></label>
                                 <input type="hidden" name="id_func" value="{{ Auth::user()->id }}">
                                 <input type="text" class="form-control" value="{{ Auth::user()->name  }}"
                                        placeholder="Teléfono Personal" readonly>
@@ -99,7 +87,7 @@
                             <div class="col-md-5">
                                 <label for="telefono"><strong>Observaciones de la Carga:</strong></label>
                                 <textarea class="form-control" name="obs_solicitud" rows="3"
-                                          placeholder="Ingrese el detalle de la reserva."></textarea>
+                                          placeholder="Observaciones a la solicitud."></textarea>
                             </div>
                         </div>
 

@@ -11,8 +11,8 @@
 @section('main-content')
 
     <div class="row">
-        <div class="col-md-6">
-            <div class="box box-primary">
+        <div class="col-md-3">
+            <div class="box box-success">
                 <div class="box-header with-border">
                     <h3 class="box-title">Filtro / Solicitudes en Trámite</h3>
                 </div>
@@ -24,16 +24,15 @@
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <input type="hidden" name="tipo_sol" value="1">
                         <div class="box-footer">
-                            <button type="reset" class="btn btn-default">Limpiar Formulario</button>
-                            <button id="btn" class="btn btn-success pull-right">Filtrar</button>
+                            <button id="btn" class="btn btn-success pull-right">Filtrar Tramite</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-6">
-            <div class="box box-success">
+        <div class="col-md-3">
+            <div class="box box-warning">
                 <div class="box-header with-border">
                     <h3 class="box-title">Filtro / Solicitudes en Archivo</h3>
                 </div>
@@ -45,8 +44,7 @@
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <input type="hidden" name="tipo_sol" value="2">
                         <div class="box-footer">
-                            <button type="reset" class="btn btn-default">Limpiar Formulario</button>
-                            <button id="btn" class="btn btn-success pull-right">Filtrar</button>
+                            <button id="btn" class="btn btn-warning pull-right">Filtrar Archivo</button>
                         </div>
                     </form>
                 </div>

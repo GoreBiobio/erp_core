@@ -38,11 +38,11 @@
                             <div class="col-md-2">
                                 <label for="rut"><strong>Seleccione Sesión</strong></label>
                                 <select class="form-control" name="id_sesion">
-                                    @foreach($sesiones as $sesiones)
-                                        <option value="{{ $sesiones->idSesiones }}">
-                                            {{ date("M/Y",strtotime($sesiones -> fechaSesion))  }}
-                                            - {{ $sesiones->numeroSesion }}
-                                            - {{ $sesiones->tipoSesion }}
+                                    @foreach($actas as $actas)
+                                        <option value="{{ $actas->idActas }}">
+                                            {{ date("d/M/Y",strtotime($actas -> fechaSesion))  }}
+                                            - {{ $actas->numActa }}
+                                            - {{ $actas->tipoSesion }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -54,8 +54,8 @@
                             </div>
 
                             <div class="col-md-2">
-                                <label for="nombres"><strong>Código Proyecto</strong></label>
-                                <input class="form-control" type="number" min="0" name="cod_proy">
+                                <label for="nombres"><strong>Código Proyecto (BIP)</strong></label>
+                                <input class="form-control" type="text" name="cod_proy">
                             </div>
 
                             <div class="col-md-4">
@@ -88,7 +88,7 @@
                             </div>
 
                             <div class="col-md-2">
-                                <label for="nombres"><strong>Monto Inversión FNDR</strong></label>
+                                <label for="nombres"><strong>Inversión FNDR (Miles de Millones)</strong></label>
                                 <input type="number" class="form-control" min="0" name="inversion_fndr">
                             </div>
 
@@ -105,6 +105,16 @@
                                 <label for="exampleInputFile"><strong>Certificado Firmado y Ord.</strong></label>
                                 <input type="file" id="exampleInputFile" name="certificado_proyecto" required>
                                 <p class="help-block">Archivo en formato .pdf ó .docx</p>
+                            </div>
+
+                            <div class="col-md-2">
+                                <label for="rut"><strong>Seleccione Área Proyecto</strong></label>
+                                <select class="form-control" name="id_area">
+                                    @foreach($areas as $areas)
+                                        <option
+                                            value="{{ $areas -> idAreas }}">{{ $areas->nombreArea }}</option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <div class="col-md-4">

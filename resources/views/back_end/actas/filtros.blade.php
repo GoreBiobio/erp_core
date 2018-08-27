@@ -46,9 +46,8 @@
                                 <label for="rut"><strong>Seleccione Tipo Sesión</strong></label>
                                 <select class="form-control" name="tipo_session">
                                     <option value="Todos">-- Todos --</option>
-                                    <option value="Ordinario">Ordinario</option>
+                                    <option value="Ordinaria">Ordinaria</option>
                                     <option value="Extraordinaria">Extraordinaria</option>
-                                    <option value="Comision">Comision</option>
                                 </select>
                             </div>
 

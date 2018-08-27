@@ -13,17 +13,7 @@ class Actas extends Controller
     public function formulario_ingreso_nuevo()
     {
 
-        $sesiones = DB::table('sesiones')
-            ->where('estadoSesion', '=', 1)
-            ->OrderBy('numeroSesion', 'ASC')
-            ->OrderBy('fechaSesion', 'DESC')
-            ->get();
-
-        $comisiones = DB::table('comisiones')->get();
-
-        $archivo = DB::table('actas')->get();
-
-        return view('back_end.actas.nuevo', compact('sesiones', 'archivo', 'comisiones'));
+        return view('back_end.actas.nuevo');
 
     }
 
@@ -38,13 +28,16 @@ class Actas extends Controller
 
         DB::table('actas')->insert([
             'fechaCargaActa' => new Datetime(),
+            'fechaSesion' => $request->input('fec_sesion'),
             'numActa' => $request->input('num_acta'),
             'ulrActaDigital' => $name,
+            'tipoActa' => 'normal',
+            'tipoSesion' => $request->input('tipo_sesion'),
             'obsActa' => $request->input('obs_acta'),
             'estadoActa' => 1,
-            'sesiones_idSesiones' => $request->input('id_sesion'),
+            'numSesionActa' => $request->input('num_sesion'),
+            'comisiones_idComisiones' => null,
             'users_id' => $request->input('id_funcionario'),
-            'comisiones' => $request->input('id_comision')
         ]);
 
         return back()->with('status', '¡Acta almacenada correctamente!');
@@ -64,62 +57,77 @@ class Actas extends Controller
 
         if ($annio != 'Todos' && $tipo != 'Todos' && $acta != '') {
             $actas = DB::table('actas')
-                ->join('sesiones', 'actas.sesiones_idSesiones', 'sesiones.idSesiones')
                 ->where([
-                    ['sesiones.tipoSesion', '=', $tipo],
-                    ['sesiones.fechaSesion', 'LIKE', $annio . '-%'],
-                    ['actas.numActa', '=', $acta]
+                    ['fechaSesion', 'LIKE', $annio . '%'],
+                    ['tipoSesion', $tipo],
+                    ['numActa', $acta],
+                    ['tipoActa', 'normal']
                 ])
+                ->OrderBy('fechaSesion', 'DESC')
                 ->get();
+
         } elseif ($annio != 'Todos' && $tipo != 'Todos' && $acta == '') {
             $actas = DB::table('actas')
-                ->join('sesiones', 'actas.sesiones_idSesiones', 'sesiones.idSesiones')
                 ->where([
-                    ['sesiones.tipoSesion', '=', $tipo],
-                    ['sesiones.fechaSesion', 'LIKE', $annio . '-%'],
+                    ['fechaSesion', 'LIKE', $annio . '%'],
+                    ['tipoSesion', $tipo],
+                    ['tipoActa', 'normal']
                 ])
+                ->OrderBy('fechaSesion', 'DESC')
                 ->get();
+
         } elseif ($annio == 'Todos' && $tipo == 'Todos' && $acta == '') {
             $actas = DB::table('actas')
-                ->join('sesiones', 'actas.sesiones_idSesiones', 'sesiones.idSesiones')
+                ->where('tipoActa', 'normal')
+                ->OrderBy('fechaSesion', 'DESC')
                 ->get();
+
         } elseif ($annio == 'Todos' && $tipo == 'Todos' && $acta != '') {
             $actas = DB::table('actas')
-                ->join('sesiones', 'actas.sesiones_idSesiones', 'sesiones.idSesiones')
                 ->where([
-                    ['actas.numActa', '=', $acta]
+                    ['tipoActa', 'normal'],
+                    ['numActa', $acta]
                 ])
+                ->OrderBy('fechaSesion', 'DESC')
                 ->get();
+
         } elseif ($annio != 'Todos' && $tipo == 'Todos' && $acta == '') {
             $actas = DB::table('actas')
-                ->join('sesiones', 'actas.sesiones_idSesiones', 'sesiones.idSesiones')
                 ->where([
-                    ['sesiones.fechaSesion', 'LIKE', $annio . '-%'],
+                    ['fechaSesion', 'LIKE', $annio . '%'],
+                    ['tipoActa', 'normal']
                 ])
+                ->OrderBy('fechaSesion', 'DESC')
                 ->get();
+
         } elseif ($annio != 'Todos' && $tipo == 'Todos' && $acta != '') {
             $actas = DB::table('actas')
-                ->join('sesiones', 'actas.sesiones_idSesiones', 'sesiones.idSesiones')
                 ->where([
-                    ['sesiones.fechaSesion', 'LIKE', $annio . '-%'],
-                    ['actas.numActa', '=', $acta]
+                    ['fechaSesion', 'LIKE', $annio . '%'],
+                    ['numActa', $acta],
+                    ['tipoActa', 'normal']
                 ])
+                ->OrderBy('fechaSesion', 'DESC')
                 ->get();
+
         } elseif ($annio == 'Todos' && $tipo != 'Todos' && $acta != '') {
             $actas = DB::table('actas')
-                ->join('sesiones', 'actas.sesiones_idSesiones', 'sesiones.idSesiones')
                 ->where([
-                    ['sesiones.tipoSesion', '=', $tipo],
-                    ['actas.numActa', '=', $acta]
+                    ['tipoSesion', $tipo],
+                    ['numActa', $acta],
+                    ['tipoActa', 'normal']
                 ])
+                ->OrderBy('fechaSesion', 'DESC')
                 ->get();
+
         } elseif ($annio == 'Todos' && $tipo != 'Todos' && $acta == '') {
             $actas = DB::table('actas')
-                ->join('sesiones', 'actas.sesiones_idSesiones', 'sesiones.idSesiones')
                 ->where([
-                    ['sesiones.tipoSesion', '=', $tipo]
+                    ['tipoSesion', $tipo],
+                    ['tipoActa', 'normal']
                 ])
                 ->get();
+
         } else {
             echo 'ERROR EN BUSQUEDA FILTRADA';
             die();
@@ -127,10 +135,10 @@ class Actas extends Controller
 
         $num = $actas->count();
 
-        if ($num==0){
+        if ($num == 0) {
             $num = 'NO SE ENCONTRARON REGISTROS';
             return view('back_end.actas.filtrar', compact('actas', 'annio', 'tipo', 'acta', 'num'));
-        }else{
+        } else {
             $num = '';
             return view('back_end.actas.filtrar', compact('actas', 'annio', 'tipo', 'acta', 'num'));
 

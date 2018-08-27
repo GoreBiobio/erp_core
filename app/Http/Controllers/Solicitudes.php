@@ -9,21 +9,13 @@ use DB;
 
 class Solicitudes extends Controller
 {
+
     public function formulario_ingreso_nuevo()
     {
 
-        $sesiones = DB::table('sesiones')
-            ->where([
-                ['estadoSesion', '=', 1],
-                //  ['tipoSesion', '=', 'Comision']
-            ])
-            ->OrderBy('numeroSesion', 'ASC')
-            ->OrderBy('fechaSesion', 'DESC')
-            ->get();
-
-        $comisiones = DB::table('comisiones')
-            ->where('estadoComisiones', '=', 1)
-            ->OrderBy('nombreComisiones', 'ASC')
+        $actas = DB::table('actas')
+            ->join('comisiones', 'actas.comisiones_idComisiones', 'comisiones.idComisiones')
+            ->where('actas.estadoActa', 1)
             ->get();
 
         $consejeros = DB::table('consejeros')
@@ -31,7 +23,7 @@ class Solicitudes extends Controller
             ->OrderBy('nombreConsejeros', 'ASC')
             ->get();
 
-        return view('back_end.solicitudes.nuevo', compact('sesiones', 'comisiones', 'consejeros'));
+        return view('back_end.solicitudes.nuevo', compact('actas', 'consejeros'));
 
     }
 
@@ -51,8 +43,7 @@ class Solicitudes extends Controller
             'urlCertificadoSolicitud' => $name,
             'obsSolicitud' => $request->input('obs_solicitud'),
             'estadoSolicitud' => 1,
-            'sesiones_idSesiones' => $request->input('id_sesion'),
-            'comisiones_idComisiones' => $request->input('id_comision'),
+            'actas_idActas' => $request->input('id_sesion'),
             'Consejeros_idConsejeros' => $request->input('id_consejero'),
             'users_id' => $request->input('id_func'),
         ]);
@@ -71,10 +62,14 @@ class Solicitudes extends Controller
         if ($request->input('tipo_sol') == 1) {
 
             $solicitudes = DB::table('solicitudes')
-                ->join('sesiones', 'solicitudes.sesiones_idSesiones', 'sesiones.idSesiones')
+                ->join('actas', 'solicitudes.actas_idActas', '=', 'actas.idActas')
+                ->join('comisiones', 'actas.comisiones_idComisiones', 'comisiones.idComisiones')
                 ->join('consejeros', 'solicitudes.Consejeros_idConsejeros', 'consejeros.idConsejeros')
-                ->join('comisiones', 'solicitudes.comisiones_idComisiones', 'comisiones.idComisiones')
-                ->where('solicitudes.estadoSolicitud', '<>', 3)
+                ->where([
+                    ['estadoSolicitud', '<>', 3],
+                    ['estadoSolicitud', '<>', 4]
+                ])
+                ->orderby('fechaEnvioSolicitud')
                 ->get();
 
             $num = $solicitudes->count();
@@ -91,11 +86,16 @@ class Solicitudes extends Controller
         } elseif ($request->input('tipo_sol') == 2) {
 
             $solicitudes = DB::table('solicitudes')
-                ->join('sesiones', 'solicitudes.sesiones_idSesiones', 'sesiones.idSesiones')
+                ->join('actas', 'solicitudes.actas_idActas', '=', 'actas.idActas')
+                ->join('comisiones', 'actas.comisiones_idComisiones', 'comisiones.idComisiones')
                 ->join('consejeros', 'solicitudes.Consejeros_idConsejeros', 'consejeros.idConsejeros')
-                ->join('comisiones', 'solicitudes.comisiones_idComisiones', 'comisiones.idComisiones')
-                ->where('solicitudes.estadoSolicitud', '=', 3)
+                ->where([
+                    ['estadoSolicitud', '<>', 1],
+                    ['estadoSolicitud', '<>', 2]
+                ])
+                ->orderby('fechaEnvioSolicitud')
                 ->get();
+
 
             $num = $solicitudes->count();
 
@@ -116,9 +116,9 @@ class Solicitudes extends Controller
         $idSolicitud = $request->input('idSolicitud');
 
         $solicitudes = DB::table('solicitudes')
-            ->join('sesiones', 'solicitudes.sesiones_idSesiones', 'sesiones.idSesiones')
+            ->join('actas', 'solicitudes.actas_idActas', '=', 'actas.idActas')
             ->join('consejeros', 'solicitudes.Consejeros_idConsejeros', 'consejeros.idConsejeros')
-            ->join('comisiones', 'solicitudes.comisiones_idComisiones', 'comisiones.idComisiones')
+            ->join('comisiones', 'actas.comisiones_idComisiones', 'comisiones.idComisiones')
             ->join('users', 'solicitudes.users_id', 'users.id')
             ->where('solicitudes.idSolicitudes', '=', $idSolicitud)
             ->first();
@@ -127,12 +127,26 @@ class Solicitudes extends Controller
             ->where('solicitudes_idSolicitudes', '=', $idSolicitud)
             ->get();
 
+        $num_docs = DB::table('documentos')
+            ->where('solicitudes_idSolicitudes', '=', $idSolicitud)
+            ->count();
+
+        $date = new datetime($solicitudes->fechaComision);
+        $date2 = new datetime('now');
+        $dif = $date->diff($date2);
+
+        if ($dif->format('%a') >= 30) {
+            $btn_arc_sr = 1;
+        } else {
+            $btn_arc_sr = 0;
+        }
+
         $gestiones = DB::table('gestiones')
             ->join('users', 'gestiones.users_id', 'users.id')
             ->where('solicitudes_idSolicitudes', '=', $idSolicitud)
             ->get();
 
-        return view('back_end.solicitudes.ficha_solicitud', compact('solicitudes', 'documentos', 'gestiones'));
+        return view('back_end.solicitudes.ficha_solicitud', compact('solicitudes', 'documentos', 'gestiones', 'btn_arc_sr', 'num_docs'));
 
     }
 
@@ -185,6 +199,17 @@ class Solicitudes extends Controller
         DB::table('solicitudes')
             ->where('idSolicitudes', '=', $idSolicitud)
             ->update(['estadoSolicitud' => 3]);
+
+        return redirect('/Solicitud/Filtro');
+    }
+
+    public function archivar_gestion_sr(Request $request)
+    {
+        $idSolicitud = $request->input('idSolicitud');
+
+        DB::table('solicitudes')
+            ->where('idSolicitudes', '=', $idSolicitud)
+            ->update(['estadoSolicitud' => 4]);
 
         return redirect('/Solicitud/Filtro');
     }

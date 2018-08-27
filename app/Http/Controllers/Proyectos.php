@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use DateTime;
 use DB;
@@ -11,10 +12,15 @@ class Proyectos extends Controller
     public function formulario_ingreso_nuevo()
     {
 
-        $sesiones = DB::table('sesiones')
-            ->where('estadoSesion', '=', 1)
-            ->OrderBy('numeroSesion', 'ASC')
-            ->OrderBy('fechaSesion', 'DESC')
+        $actas = DB::table('actas')
+            ->where([
+                ['tipoActa', 'normal'],
+                ['estadoActa', 1]
+            ])
+            ->get();
+
+        $areas = DB::table('areas')
+            ->where('estadoArea', 1)
             ->get();
 
         $comunas = DB::table('comunas')
@@ -24,7 +30,7 @@ class Proyectos extends Controller
             ->OrderBy('nombreComunas')
             ->get();
 
-        return view('back_end.proyectos.nuevo', compact('sesiones', 'comunas'));
+        return view('back_end.proyectos.nuevo', compact('actas', 'comunas', 'areas'));
     }
 
     public function guardar_ingreso_nuevo(Request $request)
@@ -47,8 +53,9 @@ class Proyectos extends Controller
             'urlCertificadoProy' => $name,
             'obsProy' => $request->input('obs_proyecto'),
             'estadoProy' => 1,
-            'sesiones_idSesiones' => $request->input('id_sesion'),
+            'actas_idActas' => $request->input('id_sesion'),
             'users_id' => $request->input('id_funcionario'),
+            'areas_idAreas' => $request->input('id_area'),
             'comunas_idComunas' => $request->input('id_comuna')
         ]);
 
@@ -65,10 +72,16 @@ class Proyectos extends Controller
         $provincias = DB::table('provincias')
             ->get();
 
+        $prov = DB::table('provincias')
+            ->get();
+
+        $cir = DB::table('circunscripciones')
+            ->get();
+
         $regiones = DB::table('regiones')
             ->get();
 
-        return view('back_end.proyectos.filtros', compact('comunas', 'provincias', 'regiones'));
+        return view('back_end.proyectos.filtros', compact('comunas', 'provincias', 'regiones', 'prov', 'cir'));
     }
 
     public function filtrar_muestras(Request $request)
@@ -81,7 +94,7 @@ class Proyectos extends Controller
             if ($request->input('annio_sesion') == 'Todos') {
 
                 $proyectos = DB::table('proyectos')
-                    ->join('sesiones', 'proyectos.sesiones_idSesiones', 'sesiones.idSesiones')
+                    ->join('actas', 'proyectos.actas_idActas', 'actas.idActas')
                     ->join('comunas', 'proyectos.comunas_idComunas', 'comunas.idComunas')
                     ->where('comunas.idComunas', '=', $comuna)
                     ->get();
@@ -98,11 +111,11 @@ class Proyectos extends Controller
 
             } else {
                 $proyectos = DB::table('proyectos')
-                    ->join('sesiones', 'proyectos.sesiones_idSesiones', 'sesiones.idSesiones')
+                    ->join('actas', 'proyectos.actas_idActas', 'actas.idActas')
                     ->join('comunas', 'proyectos.comunas_idComunas', 'comunas.idComunas')
                     ->where([
                         ['comunas.idComunas', '=', $comuna],
-                        ['sesiones.fechaSesion', 'LIKE', $annio . '-%']
+                        ['actas.fechaSesion', 'LIKE', $annio . '-%']
                     ])
                     ->get();
 
@@ -126,7 +139,7 @@ class Proyectos extends Controller
             if ($request->input('annio_sesion') == 'Todos') {
 
                 $proyectos = DB::table('proyectos')
-                    ->join('sesiones', 'proyectos.sesiones_idSesiones', 'sesiones.idSesiones')
+                    ->join('actas', 'proyectos.actas_idActas', 'actas.idActas')
                     ->join('comunas', 'proyectos.comunas_idComunas', 'comunas.idComunas')
                     ->join('provincias', 'comunas.provincias_idProvincias', 'provincias.idProvincias')
                     ->where('provincias.idProvincias', '=', $provincia)
@@ -144,12 +157,12 @@ class Proyectos extends Controller
 
             } else {
                 $proyectos = DB::table('proyectos')
-                    ->join('sesiones', 'proyectos.sesiones_idSesiones', 'sesiones.idSesiones')
+                    ->join('actas', 'proyectos.actas_idActas', 'actas.idActas')
                     ->join('comunas', 'proyectos.comunas_idComunas', 'comunas.idComunas')
                     ->join('provincias', 'comunas.provincias_idProvincias', 'provincias.idProvincias')
                     ->where([
                         ['provincias.idProvincias', '=', $provincia],
-                        ['sesiones.fechaSesion', 'LIKE', $annio . '-%']
+                        ['actas.fechaSesion', 'LIKE', $annio . '-%']
                     ])
                     ->get();
 
@@ -173,7 +186,7 @@ class Proyectos extends Controller
             if ($request->input('annio_sesion') == 'Todos') {
 
                 $proyectos = DB::table('proyectos')
-                    ->join('sesiones', 'proyectos.sesiones_idSesiones', 'sesiones.idSesiones')
+                    ->join('actas', 'proyectos.actas_idActas', 'actas.idActas')
                     ->join('comunas', 'proyectos.comunas_idComunas', 'comunas.idComunas')
                     ->join('provincias', 'comunas.provincias_idProvincias', 'provincias.idProvincias')
                     ->join('regiones', 'provincias.regiones_idRegiones', 'regiones.idRegiones')
@@ -192,13 +205,13 @@ class Proyectos extends Controller
 
             } else {
                 $proyectos = DB::table('proyectos')
-                    ->join('sesiones', 'proyectos.sesiones_idSesiones', 'sesiones.idSesiones')
+                    ->join('actas', 'proyectos.actas_idActas', 'actas.idActas')
                     ->join('comunas', 'proyectos.comunas_idComunas', 'comunas.idComunas')
                     ->join('provincias', 'comunas.provincias_idProvincias', 'provincias.idProvincias')
                     ->join('regiones', 'provincias.regiones_idRegiones', 'regiones.idRegiones')
                     ->where([
                         ['regiones.idRegiones', '=', $region],
-                        ['sesiones.fechaSesion', 'LIKE', $annio . '-%']
+                        ['actas.fechaSesion', 'LIKE', $annio . '-%']
                     ])
                     ->get();
 
@@ -220,7 +233,7 @@ class Proyectos extends Controller
             $cod_proyecto = $request->input('cod_proyecto');
 
             $proyectos = DB::table('proyectos')
-                ->join('sesiones', 'proyectos.sesiones_idSesiones', 'sesiones.idSesiones')
+                ->join('actas', 'proyectos.actas_idActas', 'actas.idActas')
                 ->join('comunas', 'proyectos.comunas_idComunas', 'comunas.idComunas')
                 ->where('proyectos.codProyecto', '=', $cod_proyecto)
                 ->get();
@@ -241,7 +254,7 @@ class Proyectos extends Controller
             $num_certificado = $request->input('num_certificado');
 
             $proyectos = DB::table('proyectos')
-                ->join('sesiones', 'proyectos.sesiones_idSesiones', 'sesiones.idSesiones')
+                ->join('actas', 'proyectos.actas_idActas', 'actas.idActas')
                 ->join('comunas', 'proyectos.comunas_idComunas', 'comunas.idComunas')
                 ->where('proyectos.numCertificado', '=', $num_certificado)
                 ->get();
@@ -271,7 +284,7 @@ class Proyectos extends Controller
             }
 
             $proyectos = DB::table('proyectos')
-                ->join('sesiones', 'proyectos.sesiones_idSesiones', 'sesiones.idSesiones')
+                ->join('actas', 'proyectos.actas_idActas', 'actas.idActas')
                 ->join('comunas', 'proyectos.comunas_idComunas', 'comunas.idComunas')
                 ->where('proyectos.montoProyecto', $signo_opcion, $monto)
                 ->get();
@@ -287,6 +300,114 @@ class Proyectos extends Controller
 
             }
         }
+
+        if ($request->input('tipo_sol') == 7) {
+
+            $proyecto = $request->input('nombre_proyecto');
+            $provincia = $request->input('prov');
+
+            $proyectos = DB::table('proyectos')
+                ->join('actas', 'proyectos.actas_idActas', 'actas.idActas')
+                ->join('comunas', 'proyectos.comunas_idComunas', 'comunas.idComunas')
+                ->join('provincias', 'comunas.provincias_idProvincias', 'provincias.idProvincias')
+                ->where([
+                    ['provincias.idProvincias', '=', $provincia],
+                    ['proyectos.nombreProyecto', 'LIKE', '%' . $proyecto . '%']
+                ])
+                ->get();
+
+            $num = $proyectos->count();
+
+            if ($num == 0) {
+                $num = 'NO SE ENCONTRARON REGISTROS';
+                return view('back_end.proyectos.filtrar', compact('proyectos', 'num'));
+            } else {
+                $num = '';
+                return view('back_end.proyectos.filtrar', compact('proyectos', 'num'));
+            }
+
+        }
+
+        if ($request->input('tipo_sol') == 8) {
+
+            $annio = $request->input('annio_sesion');
+            $cir = $request->input('cir');
+
+            if ($request->input('annio_sesion') == 'Todos') {
+
+                $proyectos = DB::table('proyectos')
+                    ->join('actas', 'proyectos.actas_idActas', 'actas.idActas')
+                    ->join('comunas', 'proyectos.comunas_idComunas', 'comunas.idComunas')
+                    ->join('circunscripciones', 'comunas.circunscripciones_idCirc', 'circunscripciones.idCirc')
+                    ->where('circunscripciones.idCirc', '=', $cir)
+                    ->get();
+
+                $num = $proyectos->count();
+
+                if ($num == 0) {
+                    $num = 'NO SE ENCONTRARON REGISTROS';
+                    return view('back_end.proyectos.filtrar', compact('proyectos', 'num'));
+                } else {
+                    $num = '';
+                    return view('back_end.proyectos.filtrar', compact('proyectos', 'num'));
+                }
+
+            } else {
+                $proyectos = DB::table('proyectos')
+                    ->join('actas', 'proyectos.actas_idActas', 'actas.idActas')
+                    ->join('comunas', 'proyectos.comunas_idComunas', 'comunas.idComunas')
+                    ->join('circunscripciones', 'comunas.circunscripciones_idCirc', 'circunscripciones.idCirc')
+                    ->where([
+                        ['circunscripciones.idCirc', '=', $cir],
+                        ['actas.fechaSesion', 'LIKE', $annio . '-%']
+                    ])
+                    ->get();
+
+                $num = $proyectos->count();
+
+                if ($num == 0) {
+                    $num = 'NO SE ENCONTRARON REGISTROS';
+                    return view('back_end.proyectos.filtrar', compact('proyectos', 'num'));
+                } else {
+                    $num = '';
+                    return view('back_end.proyectos.filtrar', compact('proyectos', 'num'));
+                }
+            }
+
+        }
+
+    }
+
+    public function mostrar_ficha(Request $request)
+    {
+        $id_proy = $request->input('id_proyecto');
+
+        $proyectos = DB::table('proyectos')
+            ->join('actas','proyectos.actas_idActas','actas.idActas')
+            ->join('comunas', 'comunas.idComunas', 'proyectos.comunas_idComunas')
+            ->join('circunscripciones', 'circunscripciones.idCirc', 'comunas.circunscripciones_idCirc')
+            ->where('idProyecto', $id_proy)
+            ->first();
+
+        return view('back_end.proyectos.ficha', compact('proyectos'));
+
+    }
+
+    public function guardar_presentacion(Request $request)
+    {
+
+        $tipo = 'PresentacionProyecto';
+        $annio = date("Y");
+        $file = $request->file('doc_digital');
+        $name = $annio . '-' . $tipo . '-' . time() . '-' . $file->getClientOriginalName();
+        $file->move(public_path() . '/StorageCore/', $name);
+
+        DB::table('proyectos')
+            ->where('idProyecto', $request->input('id_proyecto'))
+            ->update(['urlPresProy' => $name]);
+
+        return redirect('/Proyecto/Filtro');
+
     }
 
 }

@@ -269,6 +269,95 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-md-6">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Filtro / Año - Región</h3>
+                </div>
+                <!-- /.box-header -->
+                <!-- form start -->
+                <div class="box-body">
+                    <form role="form" action="/Proyecto/Filtrar" method="POST" class="form-horizontal">
+                        <!-- text input -->
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="tipo_sol" value="7">
+                        <div class="form-group">
+                            <div class="col-md-6">
+                                <label><strong>Nombre Proyecto</strong></label>
+                                <input class="form-control" type="text" name="nombre_proyecto" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="rut"><strong>Seleccione Provincia</strong></label>
+                                <select class="form-control" name="prov">
+                                    @foreach($prov as $prov)
+                                        <option
+                                            value="{{ $prov ->idProvincias }}">{{ $prov -> nombreProvincia }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="box-footer">
+                            <button type="reset" class="btn btn-default">Limpiar Formulario</button>
+                            <button id="btn" class="btn btn-success pull-right">Filtrar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Filtro / Año - Región</h3>
+                </div>
+                <!-- /.box-header -->
+                <!-- form start -->
+                <div class="box-body">
+                    <form role="form" action="/Proyecto/Filtrar" method="POST" class="form-horizontal">
+                        <!-- text input -->
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="tipo_sol" value="8">
+                        <div class="form-group">
+                            <div class="col-md-6">
+                                <label><strong>Seleccione Año Sesión</strong></label>
+                                <select class="form-control" name="annio_sesion">
+                                    <option value="Todos">-- Todos --</option>
+                                    <option value="2018">2018</option>
+                                    <option value="2017">2017</option>
+                                    <option value="2016">2016</option>
+                                    <option value="2015">2015</option>
+                                    <option value="2014">2014</option>
+                                    <option value="2013">2013</option>
+                                    <option value="2012">2012</option>
+                                    <option value="2011">2011</option>
+                                    <option value="2010">2010</option>
+                                    <option value="2009">2009</option>
+                                    <option value="2008">2008</option>
+                                    <option value="2007">2007</option>
+                                    <option value="2006">2006</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="rut"><strong>Seleccione Circunscripciones</strong></label>
+                                <select class="form-control" name="cir">
+                                    @foreach($cir as $cir)
+                                        <option
+                                            value="{{ $cir ->idCirc }}">{{ $cir -> nombreCirc }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="box-footer">
+                            <button type="reset" class="btn btn-default">Limpiar Formulario</button>
+                            <button id="btn" class="btn btn-success pull-right">Filtrar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
 @endsection

@@ -24,17 +24,19 @@
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Lista de Proyectos - Según Filtro: <i class="fa fa-arrow-right"></i>
-                        <strong>Año: </strong> XXXXXXXXXXXX
-                        <strong>Tipo:</strong> XXXXXXXXXXXXX
-                        <strong>Acta:</strong> XXXX
-                    </h3>
+                    <i class="fa fa-folder-open"></i><h3 class="box-title">Lista de Proyectos</h3>
+                    <center>
+                        <a class="btn btn-xs btn-primary" id="btnExport" href="#">
+                            <i class="fa fa-file-excel-o"></i> Exportar Planilla a Excel
+                        </a>
+                    </center>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body table-responsive no-padding">
-                    <table class="table table-hover">
+                    <table id="example1" class="table table-hover">
                         <tbody>
                         <tr>
+                            <th>ID - FICHA</th>
                             <th>Sesión Aprobación</th>
                             <th>N° Certificado</th>
                             <th>Cod. Proyecto</th>
@@ -46,8 +48,21 @@
                         </tr>
                         @foreach($proyectos as $proyectos)
                             <tr>
-                                <td>{{ date("m/Y",strtotime($proyectos -> fechaSesion))  }}
-                                    - {{ $proyectos ->numeroSesion }} - {{ $proyectos -> tipoSesion }}</td>
+                                <td>
+                                    <center>
+                                        <form action="/Proyecto/Ficha" method="POST">
+                                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                            <input type="hidden" name="id_proyecto"
+                                                   value="{{ $proyectos -> idProyecto }}">
+                                            <button type="submit" class="btn btn-primary btn-xs"><i
+                                                    class="fa fa-folder-open-o"></i>
+                                                Ver Ficha
+                                            </button>
+                                        </form>
+                                    </center>
+                                </td>
+                                <td>{{ date("d/m/Y",strtotime($proyectos -> fechaSesion))  }}
+                                    - {{ $proyectos ->numActa }} - {{ $proyectos -> tipoSesion }}</td>
                                 <td>{{ $proyectos -> numCertificado }}</td>
                                 <td>{{ $proyectos -> codProyecto }}</td>
                                 <td>{{ $proyectos -> mandatoProyecto }}</td>

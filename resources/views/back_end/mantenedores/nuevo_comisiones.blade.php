@@ -1,12 +1,12 @@
 @extends('adminlte::layouts.app')
 @section('htmlheader_title')
-    Mantenedor de Comisiones
+    Mantenedor de Comisiones / Sub Comisión
 @endsection
 @section('contentheader_title')
-    Comisiones
+    Comisiones / Sub Comisión
 @endsection
 @section('contentheader_description')
-    Mantenedor de Comisiones
+    Mantenedor de Comisiones / Sub Comisión
 @endsection
 @section('main-content')
 
@@ -14,7 +14,7 @@
         <div class="col-md-12">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Nueva Comisión</h3>
+                    <h3 class="box-title">Nueva Comisión / Sub Comisión</h3>
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
@@ -23,14 +23,22 @@
                         <!-- text input -->
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <div class="form-group">
-                            <div class="col-md-8">
-                                <label for="rut"><strong>Nombre de la Comisión</strong></label>
-                                <input class="form-control" type="text" name="nombre_comision" required>
+                            <div class="col-md-6">
+                                <label for="rut"><strong>Nombre de la Comisión o Sub Comisión</strong></label>
+                                <input class="form-control" type="text" maxlength="50" name="nombre_comision" required>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label for="rut"><strong>Tipo</strong></label>
+                                <select class="form-control" name="tipo_com_sub">
+                                    <option value="1">Comisión</option>
+                                    <option value="2">SubComisión</option>
+                                </select>
                             </div>
                         </div>
                         <div class="box-footer">
                             <button type="reset" class="btn btn-default">Limpiar Formulario</button>
-                            <button id="btn" class="btn btn-warning pull-right">Ingresar Nueva Comisión</button>
+                            <button id="btn" class="btn btn-warning pull-right">Ingresar Nueva Comisión / Sub Comisión</button>
                         </div>
                     </form>
                 </div>
@@ -41,19 +49,29 @@
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Lista de Comisiones (Mantenedor de Solicitudes) - Año {{ date('Y') }}</h3>
+                   <i class="fa fa-info"></i> <h3 class="box-title">Lista de Comisiones / Sub Comisiones (Mantenedor de Informes y Solicitudes) - Año {{ date('Y') }}</h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body table-responsive no-padding">
                     <table class="table table-hover">
                         <tbody>
                         <tr>
-                            <th>Comisiones</th>
+                            <th>Tipo</th>
+                            <th>Comisiones / Subcomisiones</th>
                             <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
                         @foreach($comisiones as $comisiones)
                             <tr>
+                                <td>
+                                    @if($comisiones->tipoComisiones==1)
+                                        <button class="btn btn-xs btn-primary"><i class="fa fa-circle-o"></i> Comisión
+                                        </button>
+                                    @else
+                                        <button class="btn btn-xs btn-warning"><i class="fa fa-circle-o"></i> Sub Comisión
+                                        </button>
+                                    @endif
+                                </td>
                                 <td>{{ $comisiones -> nombreComisiones }}</td>
                                 <td>@if($comisiones -> estadoComisiones == '1')
                                         <button class="btn btn-xs btn-success"><i class="fa fa-circle-o"></i> Activa
