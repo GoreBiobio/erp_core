@@ -98,23 +98,27 @@
                 <p class="lead">
                     <small><strong>Gestión Solicitud</strong></small>
                 </p>
-                @if($solicitudes->estadoSolicitud == 1)
-                    <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#ModalAddDocument"><i
-                            class="fa fa-file-pdf-o"></i> Agregar Documento
-                    </button>
-                    <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#ModalAddGestion"><i
-                            class="fa fa-gears"></i> Agregar Gestión
-                    </button>
-                @else
-                    <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#ModalAddDocument" disabled>
-                        <i
-                            class="fa fa-file-pdf-o"></i> Agregar Documento
-                    </button>
-                    <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#ModalAddGestion" disabled>
-                        <i
-                            class="fa fa-gears"></i> Agregar Gestión
-                    </button>
-                @endif
+                @if( Auth::user()->level == 1 )
+                    @if($solicitudes->estadoSolicitud == 1)
+                        <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#ModalAddDocument"><i
+                                class="fa fa-file-pdf-o"></i> Agregar Documento
+                        </button>
+                        <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#ModalAddGestion"><i
+                                class="fa fa-gears"></i> Agregar Gestión
+                        </button>
+                    @else
+                        <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#ModalAddDocument"
+                                disabled>
+                            <i
+                                class="fa fa-file-pdf-o"></i> Agregar Documento
+                        </button>
+                        <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#ModalAddGestion"
+                                disabled>
+                            <i
+                                class="fa fa-gears"></i> Agregar Gestión
+                        </button>
+                    @endif
+
                 <br> <br>
 
                 <table>
@@ -184,7 +188,7 @@
                         </td>
                     </tr>
                 </table>
-
+                @endif
             </div>
             <!-- /.col -->
         </div>

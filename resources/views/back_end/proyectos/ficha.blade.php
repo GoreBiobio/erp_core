@@ -66,18 +66,20 @@
                 </p>
             </div>
             <!-- /.col -->
-            @if($proyectos->urlPresProy==null)
-                <div class="col-xs-6 no-print">
-                    <p class="lead">
-                        <small><strong>Agregar Documentos</strong></small>
-                    </p>
-                    <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#ModalAddDocument"><i
-                            class="fa fa-file-pdf-o"></i> Agregar Presentación
-                    </button>
-                    <br> <br>
+            @if( Auth::user()->level == 1 )
+                @if($proyectos->urlPresProy==null)
+                    <div class="col-xs-6 no-print">
+                        <p class="lead">
+                            <small><strong>Agregar Documentos</strong></small>
+                        </p>
+                        <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#ModalAddDocument"><i
+                                class="fa fa-file-pdf-o"></i> Agregar Presentación
+                        </button>
+                        <br> <br>
 
-                </div>
-        @else
+                    </div>
+            @else
+            @endif
         @endif
         <!-- /.col -->
         </div>

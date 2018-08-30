@@ -10,9 +10,9 @@
 
     <div id="app">
         <div class="login-box">
-        <div class="login-logo">
-            <a href="{{ url('/home') }}"><b>Admin</b>LTE</a>
-        </div><!-- /.login-logo -->
+            <div class="login-logo">
+                <center><img src="/img/logo.png" alt=""></center>
+            </div><!-- /.login-logo -->
 
         @if (session('status'))
             <div class="alert alert-success">
@@ -22,7 +22,7 @@
 
         @if (count($errors) > 0)
             <div class="alert alert-danger">
-                <strong>Whoops!</strong> {{ trans('adminlte_lang::message.someproblems') }}<br><br>
+                <strong>Error!</strong> {{ trans('adminlte_lang::message.someproblems') }}<br><br>
                 <ul>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -37,17 +37,17 @@
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="token" value="{{ $token }}">
                 <div class="form-group has-feedback">
-                    <input type="email" class="form-control" placeholder="Email" name="email" value="{{ old('email') }}"/>
+                    <input type="email" class="form-control" placeholder="Correo Electrónico" name="email" value="{{ old('email') }}"/>
                     <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                 </div>
 
                 <div class="form-group has-feedback">
-                    <input type="password" class="form-control" placeholder="Password" name="password"/>
+                    <input type="password" class="form-control" placeholder="Clave" name="password"/>
                     <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                 </div>
 
                 <div class="form-group has-feedback">
-                    <input type="password" class="form-control" placeholder="Password" name="password_confirmation"/>
+                    <input type="password" class="form-control" placeholder="Repetir Clave" name="password_confirmation"/>
                     <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                 </div>
 
@@ -55,15 +55,14 @@
                     <div class="col-xs-2">
                     </div><!-- /.col -->
                     <div class="col-xs-8">
-                        <button type="submit" class="btn btn-primary btn-block btn-flat">{{ trans('adminlte_lang::message.passwordreset') }}</button>
+                        <button type="submit" class="btn btn-primary btn-block btn-flat">Resetear Clave</button>
                     </div><!-- /.col -->
                     <div class="col-xs-2">
                     </div><!-- /.col -->
                 </div>
             </form>
 
-            <a href="{{ url('/login') }}">Log in</a><br>
-            <a href="{{ url('/register') }}" class="text-center">{{ trans('adminlte_lang::message.membreship') }}</a>
+            <a href="{{ url('/login') }}">Volver e Iniciar Sesión</a><br>
 
         </div><!-- /.login-box-body -->
 

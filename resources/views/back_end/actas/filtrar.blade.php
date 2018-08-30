@@ -24,7 +24,8 @@
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-header">
-                    <i class="fa fa-info"></i><h3 class="box-title">Lista de Actas - Según Filtro: <i class="fa fa-arrow-right"></i>
+                    <i class="fa fa-info"></i>
+                    <h3 class="box-title">Lista de Actas - Según Filtro: <i class="fa fa-arrow-right"></i>
                         <strong>Año: </strong> {{ $annio }}
                         <strong>Tipo:</strong> {{ $tipo }}
                         <strong>Acta:</strong> {{$acta}}
@@ -59,7 +60,8 @@
                                 <td>{{ $actas -> numActa }}</td>
                                 <td>
                                     @if($actas -> tipoSesion == 'Ordinaria')
-                                        <button class="btn btn-xs btn-success"><i class="fa fa-flag-o"></i> Sesión Ordinaria
+                                        <button class="btn btn-xs btn-success"><i class="fa fa-flag-o"></i> Sesión
+                                            Ordinaria
                                         </button>
                                     @elseif($actas -> tipoSesion== 'Extraordinaria')
                                         <button class="btn btn-xs btn-warning"><i class="fa fa-flag-o"></i>
@@ -81,34 +83,38 @@
                                     </a></td>
                                 <td>{{ $actas -> obsActa }}</td>
                                 <td>
-                                    @if($actas -> estadoActa == 1)
-                                        <center>
-                                            <form action="/Mantenedor/Promocion" method="POST">
-                                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                                <input type="hidden" name="tipo" value="sesion">
-                                                <input type="hidden" name="tipo_prom" value="quitar">
-                                                <input type="hidden" name="id"
-                                                       value="{{ $actas -> idActas }}">
-                                                <button type="submit" class="btn btn-danger btn-xs"><i
-                                                        class="fa fa-arrow-down"></i>
-                                                    Dejar de Promover
-                                                </button>
-                                            </form>
-                                        </center>
-                                    @else
-                                        <center>
-                                            <form action="/Mantenedor/Promocion" method="POST">
-                                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                                <input type="hidden" name="tipo" value="sesion">
-                                                <input type="hidden" name="tipo_prom" value="promover">
-                                                <input type="hidden" name="id"
-                                                       value="{{ $actas -> idActas }}">
-                                                <button type="submit" class="btn btn-success btn-xs"><i
-                                                        class="fa fa-arrow-up"></i>
-                                                    Promover
-                                                </button>
-                                            </form>
-                                        </center>
+                                    @if( Auth::user()->level == 1 )
+                                        @if($actas -> estadoActa == 1)
+                                            <center>
+                                                <form action="/Mantenedor/Promocion" method="POST">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                    <input type="hidden" name="tipo" value="sesion">
+                                                    <input type="hidden" name="tipo_prom" value="quitar">
+                                                    <input type="hidden" name="id"
+                                                           value="{{ $actas -> idActas }}">
+                                                    <button type="submit" class="btn btn-danger btn-xs"><i
+                                                            class="fa fa-arrow-down"></i>
+                                                        Dejar de Promover
+                                                    </button>
+                                                </form>
+                                            </center>
+                                        @else
+                                            <center>
+                                                <form action="/Mantenedor/Promocion" method="POST">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                    <input type="hidden" name="tipo" value="sesion">
+                                                    <input type="hidden" name="tipo_prom" value="promover">
+                                                    <input type="hidden" name="id"
+                                                           value="{{ $actas -> idActas }}">
+                                                    <button type="submit" class="btn btn-success btn-xs"><i
+                                                            class="fa fa-arrow-up"></i>
+                                                        Promover
+                                                    </button>
+                                                </form>
+                                            </center>
+                                        @endif
+                                        @else
+                                        <button class="btn btn-xs btn-warning"><i class="fa fa-close"></i> NO DISPONIBLE</button>
                                     @endif
                                 </td>
                             </tr>

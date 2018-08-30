@@ -15,7 +15,8 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Consejo Regional - Región del Biobío - Fecha/Hora: {{  date('d / m / y - H:i:s')  }}</div>
+                    <div class="panel-heading">Consejo Regional - Región del Biobío -
+                        Fecha/Hora: {{  date('d / m / y - H:i:s')  }}</div>
 
                     <div class="panel-body">
 
@@ -32,18 +33,21 @@
                                     <ul class="nav nav-stacked">
                                         <li><a href="/Solicitud/Filtro">En Trámite <span
                                                     class="pull-right badge bg-blue">{{ $num_tramite }}</span></a></li>
-                                        <li><a href="/Solicitud/Filtro">Sin Respuesta +30 días <span
-                                                    class="pull-right badge bg-yellow">{{ $sum }}</span></a>
-                                        </li>
-                                        <li><a href="/Solicitud/Filtro">Concluido sin Archivar <span
-                                                    class="pull-right badge bg-green">{{ $num_concluido }}</span></a>
-                                        </li>
-                                        <li><a href="/Solicitud/Filtro">Archivado <strong>NO</strong> Respondido <span
-                                                    class="pull-right badge bg-red">{{ $num_archivo_sr }}</span></a>
-                                        </li>
-                                        <li><a href="/Solicitud/Filtro">Archivado Respondido <span
-                                                    class="pull-right badge bg-success">{{ $num_archivo  }}</span></a>
-                                        </li>
+                                        @if( Auth::user()->level == 1 )
+                                            <li><a href="/Solicitud/Filtro">Sin Respuesta +30 días <span
+                                                        class="pull-right badge bg-yellow">{{ $sum }}</span></a>
+                                            </li>
+                                            <li><a href="/Solicitud/Filtro">Concluido sin Archivar <span
+                                                        class="pull-right badge bg-green">{{ $num_concluido }}</span></a>
+                                            </li>
+                                            <li><a href="/Solicitud/Filtro">Archivado <strong>NO</strong> Respondido
+                                                    <span
+                                                        class="pull-right badge bg-red">{{ $num_archivo_sr }}</span></a>
+                                            </li>
+                                            <li><a href="/Solicitud/Filtro">Archivado Respondido <span
+                                                        class="pull-right badge bg-success">{{ $num_archivo  }}</span></a>
+                                            </li>
+                                        @endif
                                     </ul>
                                 </div>
                             </div>
