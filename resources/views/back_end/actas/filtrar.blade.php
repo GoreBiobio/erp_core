@@ -76,11 +76,18 @@
                                         </button>
                                     @endif
                                 </td>
-                                <td><a href="/StorageCore/{{ $actas -> ulrActaDigital }}" target="_blank">
-                                        <button class="btn btn-xs btn-primary"><i class="fa fa-file-pdf-o"></i>
-                                            Descargar Documento
-                                        </button>
-                                    </a></td>
+                                <td>@if($actas->ulrActaDigital == null)
+                                            <button class="btn btn-xs btn-warning" disabled><i class="fa fa-file-pdf-o"></i>
+                                                Acta NO Cargada
+                                            </button>
+                                        @else
+                                        <a href="/StorageCore/{{ $actas -> ulrActaDigital }}" target="_blank">
+                                            <button class="btn btn-xs btn-primary"><i class="fa fa-file-pdf-o"></i>
+                                                Descargar Documento
+                                            </button>
+                                        </a>
+                                    @endif
+                                </td>
                                 <td>{{ $actas -> obsActa }}</td>
                                 <td>
                                     @if( Auth::user()->level == 1 )

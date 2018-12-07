@@ -18,6 +18,10 @@
         <div class="alert alert-danger">
             {{ session('error') }}
         </div>
+    @elseif(session('cuidado'))
+        <div class="alert alert-warning">
+            {{ session('cuidado') }}
+        </div>
     @endif
 
     <div class="row">
@@ -68,7 +72,7 @@
                         <div class="form-group">
                             <div class="col-md-3">
                                 <label><strong>Acta Digital del Consejo</strong></label>
-                                <input type="file" name="doc_digital" required>
+                                <input type="file" name="doc_digital">
                                 <p class="help-block">Archivo en formato .pdf ó .docx</p>
                             </div>
 
