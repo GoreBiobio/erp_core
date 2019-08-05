@@ -24,7 +24,7 @@
             @endif
 
             <div class="login-box-body">
-                <p class="login-box-msg"> Sistema de Gestión Consejo Regional </p>
+                <p class="login-box-msg"><i class="fa fa-user"></i> Sistema de Gestión <br>y Consulta Consejo Regional </p>
                 <form action="{{ url('/login') }}" method="post">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <div class="form-group has-feedback">
