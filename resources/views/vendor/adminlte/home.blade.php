@@ -21,6 +21,7 @@
                     <div class="panel-body">
 
                         <div class="col-md-6">
+                        @if( Auth::user()->level == 1 )
                             <!-- Widget: user widget style 1 -->
                             <div class="box box-widget widget-user-2">
                                 <!-- Add the bg color to the header using any of the bg-* classes -->
@@ -33,7 +34,7 @@
                                     <ul class="nav nav-stacked">
                                         <li><a href="/Solicitud/Filtro">En Trámite <span
                                                     class="pull-right badge bg-blue">{{ $num_tramite }}</span></a></li>
-                                        @if( Auth::user()->level == 1 )
+
                                             <li><a href="/Solicitud/Filtro">Sin Respuesta +30 días <span
                                                         class="pull-right badge bg-yellow">{{ $sum }}</span></a>
                                             </li>
